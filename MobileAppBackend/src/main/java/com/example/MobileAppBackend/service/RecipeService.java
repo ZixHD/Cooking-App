@@ -68,7 +68,7 @@ public class RecipeService {
             List<Step> mappedSteps = createRecipeRequest.getSteps().stream()
                     .map(dto -> {
                         Step step = new Step();
-                        step.setStep_number(dto.getStepNumber());
+                        step.setStepNumber(dto.getStepNumber());
                         step.setInstruction(dto.getInstruction());
                         step.setMedia(dto.getMedia());
                         return step;

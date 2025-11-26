@@ -13,6 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class Rating {
 
-    private Long userId;
+    private String userId;
     private int score;
 }
