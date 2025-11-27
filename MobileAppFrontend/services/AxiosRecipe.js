@@ -30,12 +30,22 @@ const apiRecipe = axios.create({
 // );
 
 
-export const fetchRecipes = async () =>{
+export const fetchRecipes = async () => {
     try{
         const response = await apiRecipe.get()
         return response.data;
     }catch (error) {
         console.error("Error fetching recipes: ", error);
+        throw error;
+    }
+}
+
+export const fetchRecipeById = async (id) => {
+    try{
+        const response = await apiRecipe.get(`/${id}`)
+        return response.data
+    }catch (error) {
+        console.error("Error fetching recipe: ", error);
         throw error;
     }
 }

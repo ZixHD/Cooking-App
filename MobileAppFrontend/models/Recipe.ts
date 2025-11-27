@@ -4,16 +4,24 @@ export default interface Recipe {
     title: string,
     author_id: string,
     description: string,
-    ingredients: Ingredient[] 
+    ingredients: Ingredient[],
+    steps: Step[],
+    tags: string[],
+    cuisine: string[],
+    allergies: string[]
+    difficulty: string,
+    prep_time: number,
+    calories: number
+
 }
 
-interface Ingredient {
+export interface Ingredient {
     name: string,
     quantity: string
 }
 
-interface Step {
-    step_number: number,
+export interface Step {
+    stepNumber: number,
     instruction: string,
     media: string
 }

@@ -51,6 +51,11 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
+    public User getUserById(String id){
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.orElse(null);
+    }
+
     public User getUserByUsername(String username){
         Optional<User> optionalUser = userRepository.findByUsername(username);
         return optionalUser.orElse(null);
