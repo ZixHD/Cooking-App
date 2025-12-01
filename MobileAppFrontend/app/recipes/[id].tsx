@@ -5,16 +5,19 @@ import { fetchRecipeById } from "@/services/AxiosRecipe"
 import { fetchUserById} from "@/services/AxiosUser"
 import { useLocalSearchParams } from "expo-router"
 import { useEffect, useState } from "react"
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native"
-
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import { useRouter } from "expo-router";
+import { Ionicons } from '@expo/vector-icons';
 
 const RecipeDetails = () => {
 
     const { id } = useLocalSearchParams()
+    const [liked, setLiked] = useState(false)
+    const [share, setShared] = useState(true)
     const [recipe, setRecipe] = useState<Recipe | null>(null);    
     const [user, setUser] = useState<User | null >(null)
     const [loading, setLoading] = useState(true)
-    
+    const router = useRouter()
 
 
     useEffect(() => {
@@ -40,8 +43,29 @@ const RecipeDetails = () => {
 
 
     return (
-
+      <>
+      
+   
     <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.buttonsContainer}>
+        <Pressable onPress={() => router.back()}>
+         <Ionicons name = "arrow-back" size={40} color="#000000ff" />
+          </Pressable>
+          <View style={styles.socialContainer}>
+          <Pressable onPress={() => setShared(true)}>
+            <Ionicons name = "share-social-outline" size={30} color="#000000ff"/>
+          </Pressable>
+          <Pressable onPress={() => setLiked(prev => !prev)}>
+            {liked ? (
+            <Ionicons name = "star" size={30} color="#ffe047ff"/>
+          ) : (
+            <Ionicons name = "star-outline" size={30} color="#ffe047ff"/>
+          )}
+          </Pressable>
+        </View>
+      </View>
+   
+   
       <Text style={styles.title}>{recipe?.title}</Text>
       <Text style={styles.description}>Author: {user?.username}</Text>
       <Text style={styles.description}>{recipe?.description}</Text>
@@ -91,6 +115,7 @@ const RecipeDetails = () => {
       
      
     </ScrollView>
+    </>
   )
 }
 
@@ -102,6 +127,7 @@ export default  RecipeDetails
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    paddingTop: 50,
   },
   loading: {
     marginTop: 40,
@@ -149,4 +175,13 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 14,
   },
+  buttonsContainer: {
+    flexDirection: "row",
+  },
+  socialContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    marginLeft: "auto"
+    
+  }
 })
