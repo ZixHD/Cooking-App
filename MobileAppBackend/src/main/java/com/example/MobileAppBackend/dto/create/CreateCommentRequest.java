@@ -1,4 +1,4 @@
-package com.example.MobileAppBackend.dto;
+package com.example.MobileAppBackend.dto.create;
 
 import lombok.Data;
 import lombok.ToString;

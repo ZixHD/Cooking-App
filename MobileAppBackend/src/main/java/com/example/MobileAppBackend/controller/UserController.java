@@ -1,11 +1,10 @@
 package com.example.MobileAppBackend.controller;
 
-import com.example.MobileAppBackend.dto.CreateUserRequest;
+import com.example.MobileAppBackend.dto.create.CreateUserRequest;
 import com.example.MobileAppBackend.model.User;
 import com.example.MobileAppBackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

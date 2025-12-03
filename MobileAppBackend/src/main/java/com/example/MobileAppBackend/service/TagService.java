@@ -1,6 +1,6 @@
 package com.example.MobileAppBackend.service;
 
-import com.example.MobileAppBackend.dto.TagDto;
+import com.example.MobileAppBackend.dto.model.TagDto;
 import com.example.MobileAppBackend.model.Tag;
 import com.example.MobileAppBackend.repository.TagRepository;
 import lombok.RequiredArgsConstructor;

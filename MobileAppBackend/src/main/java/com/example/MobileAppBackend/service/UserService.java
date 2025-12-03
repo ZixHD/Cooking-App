@@ -1,7 +1,7 @@
 package com.example.MobileAppBackend.service;
 
 
-import com.example.MobileAppBackend.dto.CreateUserRequest;
+import com.example.MobileAppBackend.dto.create.CreateUserRequest;
 import com.example.MobileAppBackend.model.User;
 import com.example.MobileAppBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

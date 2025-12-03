@@ -1,6 +1,6 @@
-package com.example.MobileAppBackend.dto;
+package com.example.MobileAppBackend.dto.create;
 
-import com.example.MobileAppBackend.model.Rating;
+import com.example.MobileAppBackend.dto.model.RatingDto;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;

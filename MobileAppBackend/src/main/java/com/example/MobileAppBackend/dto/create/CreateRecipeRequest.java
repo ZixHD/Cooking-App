@@ -1,6 +1,8 @@
-package com.example.MobileAppBackend.dto;
+package com.example.MobileAppBackend.dto.create;
 
 
+import com.example.MobileAppBackend.dto.model.IngredientDto;
+import com.example.MobileAppBackend.dto.model.StepDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

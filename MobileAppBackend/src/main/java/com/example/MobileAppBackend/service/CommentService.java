@@ -1,7 +1,7 @@
 package com.example.MobileAppBackend.service;
 
 
-import com.example.MobileAppBackend.dto.CreateCommentRequest;
+import com.example.MobileAppBackend.dto.create.CreateCommentRequest;
 import com.example.MobileAppBackend.model.Comment;
 import com.example.MobileAppBackend.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;

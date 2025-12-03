@@ -1,6 +1,6 @@
 package com.example.MobileAppBackend.service;
 
-import com.example.MobileAppBackend.dto.CreatePostRequest;
+import com.example.MobileAppBackend.dto.create.CreatePostRequest;
 import com.example.MobileAppBackend.model.Post;
 import com.example.MobileAppBackend.model.Rating;
 import com.example.MobileAppBackend.repository.PostRepository;

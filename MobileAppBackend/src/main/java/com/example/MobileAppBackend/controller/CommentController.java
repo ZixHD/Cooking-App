@@ -1,11 +1,8 @@
 package com.example.MobileAppBackend.controller;
 
-import com.example.MobileAppBackend.dto.CreateCommentRequest;
-import com.example.MobileAppBackend.dto.CreateUserRequest;
+import com.example.MobileAppBackend.dto.create.CreateCommentRequest;
 import com.example.MobileAppBackend.model.Comment;
-import com.example.MobileAppBackend.model.User;
 import com.example.MobileAppBackend.service.CommentService;
-import com.example.MobileAppBackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

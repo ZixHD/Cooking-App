@@ -1,7 +1,7 @@
 package com.example.MobileAppBackend.controller;
 
 
-import com.example.MobileAppBackend.dto.CreatePostRequest;
+import com.example.MobileAppBackend.dto.create.CreatePostRequest;
 import com.example.MobileAppBackend.model.Post;
 import com.example.MobileAppBackend.service.PostService;
 import lombok.RequiredArgsConstructor;

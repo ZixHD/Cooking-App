@@ -1,5 +1,4 @@
-package com.example.MobileAppBackend.dto;
-
+package com.example.MobileAppBackend.dto.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@Slf4j
-public class TagDto {
+import java.util.List;
 
-    private String id;
-    private String name;
+@Data
+@Slf4j
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class FilterRequest {
+
+    private List<String> tags;
 }

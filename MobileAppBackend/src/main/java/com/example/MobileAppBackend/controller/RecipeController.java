@@ -1,8 +1,8 @@
 package com.example.MobileAppBackend.controller;
 
-import com.example.MobileAppBackend.dto.CreateRecipeRequest;
+import com.example.MobileAppBackend.dto.create.CreateRecipeRequest;
+import com.example.MobileAppBackend.dto.model.FilterRequest;
 import com.example.MobileAppBackend.model.Recipe;
-import com.example.MobileAppBackend.repository.RecipeRepository;
 import com.example.MobileAppBackend.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +27,11 @@ public class RecipeController {
     @GetMapping("/{id}")
     public ResponseEntity<Recipe> getRecipeById(@PathVariable String id){
         return ResponseEntity.ok(recipeService.getRecipeById(id));
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Recipe>> filterRecipes(@RequestBody FilterRequest filterRequest){
+        return ResponseEntity.ok(recipeService.filterRecipes(filterRequest));
     }
 
     @PostMapping("/create")

@@ -1,4 +1,4 @@
-package com.example.MobileAppBackend.dto;
+package com.example.MobileAppBackend.dto.model;
 
 
 import jakarta.validation.constraints.NotBlank;
