@@ -1,0 +1,58 @@
+package com.example.MobileAppBackend.service;
+
+import com.example.MobileAppBackend.config.JwtService;
+import com.example.MobileAppBackend.dto.LoginRequest;
+import com.example.MobileAppBackend.dto.RegisterRequest;
+import com.example.MobileAppBackend.model.User;
+import com.example.MobileAppBackend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+
+    private boolean verifyPassword(String rawPassword, String hashedPassword) {
+        if (rawPassword == null || hashedPassword == null) return false;
+        return BCrypt.checkpw(rawPassword, hashedPassword);
+    }
+
+    public void register(RegisterRequest registerRequest) throws IllegalArgumentException{
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already in use");
+        }
+
+
+        String hashedPassword = passwordEncoder.encode(registerRequest.getPassword());
+
+
+        User user = new User();
+        user.setEmail(registerRequest.getEmail());
+        user.setPassword(hashedPassword);
+
+        userRepository.save(user);
+    }
+
+    public String login(LoginRequest loginRequest) throws IllegalArgumentException {
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
+
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if(user != null && verifyPassword(password, user.getPassword())) {
+            return jwtService.generateToken(user.getId(), user.getUsername());
+        }
+        throw new IllegalArgumentException("Invalid email or password");
+
+    }
+
+}
