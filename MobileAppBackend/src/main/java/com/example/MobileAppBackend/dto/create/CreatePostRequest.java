@@ -25,7 +25,7 @@ public class CreatePostRequest {
     private String recipeId;
 
     @NotBlank(message="Text cannot be empty.")
-    @Size(min = 5, max = 50, message = "Post text must be between 5 and 50 characters long.")
+    @Size(min = 5, max = 100, message = "Post text must be between 5 and 50 characters long.")
     private String text;
 
     private List<RatingDto> ratings;

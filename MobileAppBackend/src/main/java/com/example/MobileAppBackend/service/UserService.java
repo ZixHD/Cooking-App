@@ -6,6 +6,8 @@ import com.example.MobileAppBackend.model.User;
 import com.example.MobileAppBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,12 +34,16 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    public User editUser(String username, CreateUserRequest userDto){
-        System.out.println("EditService");
-        User existingUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Username not found"));
+    public User editUser(String user_id, CreateUserRequest userDto){
+
+        User existingUser = userRepository.findById(user_id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         User user = modelMapper.map(userDto, User.class);
+
+        if(!existingUser.getId().equals(getCurrentUserId())){
+            throw new RuntimeException("You are not allowed to edit this user ");
+        }
 
         Optional.ofNullable(user.getUsername()).ifPresent(existingUser::setUsername);
         Optional.ofNullable(user.getEmail()).ifPresent(existingUser::setEmail);
@@ -64,11 +70,20 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public void deleteUser(String username){
-       Optional<User> optionalUser = userRepository.findByUsername(username);
-        optionalUser.ifPresent(userRepository::delete);
+    public void deleteUser(String user_id){
+       Optional<User> optionalUser = userRepository.findById(user_id);
+       User user = optionalUser.get();
+       if(!user.getId().equals(getCurrentUserId())){
+            throw new RuntimeException("You are not allowed to remove this user ");
+       }
+       optionalUser.ifPresent(userRepository::delete);
     }
 
+    private String getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return currentUser.getId();
+    }
 
 
 

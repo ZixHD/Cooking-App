@@ -2,7 +2,7 @@ package com.example.MobileAppBackend.config;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -10,14 +10,16 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private final String SECRET = "SUPER_SECRET_JWT_KEY_64_CHARS_MINIMUM";
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     public String generateToken(String user_id, String username) {
         return Jwts.builder()
                 .setSubject(user_id)
-                .setSubject(username)
+                .claim("id", user_id)
+                .claim("username", username)
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // 15 min
-                .signWith(Keys.hmacShaKeyFor(SECRET.getBytes()))
+                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
                 .compact();
     }
 
@@ -32,7 +34,7 @@ public class JwtService {
 
     public String extractUserId(String token){
         return Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(SECRET.getBytes()))
+                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
                 .build()
                 .parseClaimsJws(token)
                 .getBody()

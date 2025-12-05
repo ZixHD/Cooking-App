@@ -3,9 +3,12 @@ package com.example.MobileAppBackend.service;
 
 import com.example.MobileAppBackend.dto.create.CreateCommentRequest;
 import com.example.MobileAppBackend.model.Comment;
+import com.example.MobileAppBackend.model.User;
 import com.example.MobileAppBackend.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +43,9 @@ public class CommentService {
         Comment existingComment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
 
+        if(!existingComment.getAuthorId().equals(getCurrentUserId())) {
+            throw new RuntimeException("You are not allowed to edit this comment");
+        }
         Comment comment =  modelMapper.map(createCommentRequest, Comment.class);
 
         Optional.ofNullable(comment.getAuthorId()).ifPresent(existingComment::setAuthorId);
@@ -52,7 +58,17 @@ public class CommentService {
     }
     public void deleteComment(String id){
         Optional<Comment> optionalComment = commentRepository.findById(id);
+        Comment comment = optionalComment.get();
+        if(!comment.getAuthorId().equals(getCurrentUserId())) {
+            throw new RuntimeException("You are not allowed to remove this comment");
+        }
         optionalComment.ifPresent(commentRepository::delete);
+    }
+
+    private String getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return currentUser.getId();
     }
 
 }

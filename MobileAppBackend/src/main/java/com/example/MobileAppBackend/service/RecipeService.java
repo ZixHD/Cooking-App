@@ -4,8 +4,11 @@ import com.example.MobileAppBackend.dto.create.CreateRecipeRequest;
 import com.example.MobileAppBackend.dto.model.FilterRequest;
 import com.example.MobileAppBackend.model.*;
 import com.example.MobileAppBackend.repository.RecipeRepository;
+import com.example.MobileAppBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,7 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
 
     public List<Recipe> getAllRecipes(){
@@ -28,7 +32,9 @@ public class RecipeService {
         return this.recipeRepository.findById(id).orElse(null);
     }
 
+    //TODO: Add filtering with calorie range, date_and_time, cuisine and so on
     public List<Recipe> filterRecipes(FilterRequest filterRequest){
+
         List<String> tags = filterRequest.getTags();
         if (tags.isEmpty()){
             return this.recipeRepository.findAll();
@@ -55,9 +61,13 @@ public class RecipeService {
     }
 
     public Recipe editRecipe(String id, CreateRecipeRequest createRecipeRequest){
+
         Recipe existingRecipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Recipe not found"));
 
+        if(!existingRecipe.getAuthor_id().equals(getCurrentUserId())){
+            throw new RuntimeException("You are not the author of the recipe.");
+        }
         Optional.ofNullable(createRecipeRequest.getTitle()).ifPresent(existingRecipe::setTitle);
         Optional.ofNullable(createRecipeRequest.getAuthor_id()).ifPresent(existingRecipe::setAuthor_id);
 
@@ -99,10 +109,21 @@ public class RecipeService {
     }
 
     public void deleteRecipe(String id){
+
+
+
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
+        Recipe recipe = optionalRecipe.get();
+        if(!recipe.getAuthor_id().equals(getCurrentUserId())){
+            throw new RuntimeException("You are not the author of the recipe.");
+        }
         optionalRecipe.ifPresent(recipeRepository::delete);
     }
 
-
+    private String getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return currentUser.getId();
+    }
 
 }

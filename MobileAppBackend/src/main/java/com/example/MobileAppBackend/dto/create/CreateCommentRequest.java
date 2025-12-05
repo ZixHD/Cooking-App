@@ -22,7 +22,7 @@ public class CreateCommentRequest {
     private String postId;
 
     @NotBlank(message = "Comment must have text.")
-    @Size(min =2, max = 50, message = "Comment must be between 2 and 50 characters long.")
+    @Size(min = 2, max = 100, message = "Comment must be between 2 and 50 characters long.")
     private String text;
     private int views;
     private LocalDateTime created_at;

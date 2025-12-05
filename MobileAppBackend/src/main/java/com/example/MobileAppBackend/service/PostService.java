@@ -3,9 +3,12 @@ package com.example.MobileAppBackend.service;
 import com.example.MobileAppBackend.dto.create.CreatePostRequest;
 import com.example.MobileAppBackend.model.Post;
 import com.example.MobileAppBackend.model.Rating;
+import com.example.MobileAppBackend.model.User;
 import com.example.MobileAppBackend.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -43,6 +46,9 @@ public class PostService {
     public Post editPost(String id, CreatePostRequest createPostRequest) {
         Post existingPost = this.postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
+        if(!existingPost.getAuthorId().equals(getCurrentUserId())) {
+            throw new RuntimeException("You are not allowed to edit this post");
+        }
 
         Optional.ofNullable(createPostRequest.getAuthorId()).ifPresent(existingPost::setAuthorId);
         Optional.ofNullable(createPostRequest.getRecipeId()).ifPresent(existingPost::setRecipeId);
@@ -66,7 +72,17 @@ public class PostService {
 
     public void deletePost(String id){
         Optional<Post> optionalPost = this.postRepository.findById(id);
+        Post post = optionalPost.get();
+        if(!post.getAuthorId().equals(getCurrentUserId())) {
+            throw new RuntimeException("You are not allowed to remove this post");
+        }
         optionalPost.ifPresent(postRepository::delete);
+    }
+
+    private String getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return currentUser.getId();
     }
 
 }
