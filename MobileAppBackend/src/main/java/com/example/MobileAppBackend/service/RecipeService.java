@@ -7,10 +7,15 @@ import com.example.MobileAppBackend.repository.RecipeRepository;
 import com.example.MobileAppBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,6 +27,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final MongoTemplate mongoTemplate;
 
 
     public List<Recipe> getAllRecipes(){
@@ -35,13 +41,64 @@ public class RecipeService {
     //TODO: Add filtering with calorie range, date_and_time, cuisine and so on
     public List<Recipe> filterRecipes(FilterRequest filterRequest){
 
-        List<String> tags = filterRequest.getTags();
-        if (tags.isEmpty()){
-            return this.recipeRepository.findAll();
+        Query query = new Query();
+        List<Criteria> criteriaList = new ArrayList<>();
+
+        if (filterRequest.getTags() != null && !filterRequest.getTags().isEmpty()) {
+            for (String tag : filterRequest.getTags()) {
+                criteriaList.add(Criteria.where("tags").is(tag));
+            }
         }
-        return recipeRepository.findAll().stream()
-                .filter(recipe -> recipe.getTags().stream().anyMatch(tags::contains))
-                .toList();
+        if(filterRequest.getAllergies() != null && !filterRequest.getAllergies().isEmpty()){
+            criteriaList.add(Criteria.where("allergies").nin(filterRequest.getAllergies()));
+        }
+        if(filterRequest.getDifficulty() != null && !filterRequest.getDifficulty().isEmpty()){
+            criteriaList.add(Criteria.where("difficulty").in(filterRequest.getDifficulty()));
+        }
+
+        if(filterRequest.getCuisine() != null && !filterRequest.getCuisine().isEmpty()){
+            criteriaList.add(Criteria.where("cuisine").in(filterRequest.getCuisine()));
+        }
+
+        if(filterRequest.getMinCalories() != null || filterRequest.getMaxCalories() != null){
+            Criteria calories = Criteria.where("calories");
+            if(filterRequest.getMinCalories() != null){
+                calories = calories.gte(filterRequest.getMinCalories());
+            }
+            if(filterRequest.getMaxCalories() != null){
+                calories = calories.lte(filterRequest.getMaxCalories());
+            }
+            criteriaList.add(calories);
+        }
+
+        if(filterRequest.getMinPrepTime() != null || filterRequest.getMaxPrepTime() != null){
+            Criteria prep = Criteria.where("prep_time");
+            if(filterRequest.getMinPrepTime() != null){
+                prep = prep.gte(filterRequest.getMinPrepTime());
+            }
+            if(filterRequest.getMaxPrepTime() != null){
+                prep = prep.lte(filterRequest.getMaxPrepTime());
+            }
+            criteriaList.add(prep);
+        }
+
+        if(!criteriaList.isEmpty()){
+            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
+        }
+
+        // Sorting
+        if(filterRequest.isSortByNewest()){
+            query.with(Sort.by(Sort.Direction.DESC, "created_at"));
+        }else if(filterRequest.isSortByOldest()){
+            query.with(Sort.by(Sort.Direction.ASC, "created_at"));
+        }else if(filterRequest.isSortByPopularity()){
+            query.with(Sort.by(Sort.Direction.ASC, "views"));
+        }else if(filterRequest.isSortByPrepTime()){
+            query.with(Sort.by(Sort.Direction.ASC, "prep_time"));
+        }
+
+        return mongoTemplate.find(query, Recipe.class);
+
     }
 
     public Recipe createRecipe(CreateRecipeRequest createRecipeRequest){
@@ -109,9 +166,6 @@ public class RecipeService {
     }
 
     public void deleteRecipe(String id){
-
-
-
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
         Recipe recipe = optionalRecipe.get();
         if(!recipe.getAuthor_id().equals(getCurrentUserId())){

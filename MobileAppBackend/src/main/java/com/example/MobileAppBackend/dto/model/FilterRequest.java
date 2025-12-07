@@ -15,5 +15,21 @@ import java.util.List;
 @ToString
 public class FilterRequest {
 
+    //TODO: maybe move this to POSTS
+    private boolean sortByNewest;
+    private boolean sortByOldest;
+    private boolean sortByPopularity;
+    private boolean sortByPrepTime;
+
+    private Integer minCalories;
+    private Integer maxCalories;
+
+    private Integer minPrepTime;
+    private Integer maxPrepTime;
+
+    private List<String> allergies;
     private List<String> tags;
+
+    private String difficulty;
+    private String cuisine;
 }
