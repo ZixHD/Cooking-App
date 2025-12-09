@@ -2,10 +2,8 @@ package com.example.MobileAppBackend.service;
 
 import com.example.MobileAppBackend.dto.create.CreatePostRequest;
 import com.example.MobileAppBackend.dto.model.PostWithRecipe;
-import com.example.MobileAppBackend.model.Post;
-import com.example.MobileAppBackend.model.Rating;
-import com.example.MobileAppBackend.model.Recipe;
-import com.example.MobileAppBackend.model.User;
+import com.example.MobileAppBackend.model.*;
+import com.example.MobileAppBackend.repository.CommentRepository;
 import com.example.MobileAppBackend.repository.PostRepository;
 import com.example.MobileAppBackend.repository.RecipeRepository;
 import com.example.MobileAppBackend.repository.UserRepository;
@@ -27,6 +25,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
     private final ModelMapper modelMapper;
 
 
@@ -40,8 +39,11 @@ public class PostService {
 
         Recipe recipe = recipeRepository.findById(post.getRecipeId())
                 .orElseThrow(() -> new RuntimeException("Recipe not found"));
-
-        return new PostWithRecipe(post, recipe);
+        List<Comment> comments = commentRepository.findCommentsByPostId(id);
+        if (comments == null || comments.isEmpty()) {
+            throw new RuntimeException("No comments found for this post.");
+        }
+        return new PostWithRecipe(post, recipe, comments);
 
     }
 
