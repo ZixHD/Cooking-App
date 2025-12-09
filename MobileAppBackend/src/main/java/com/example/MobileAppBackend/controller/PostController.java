@@ -2,6 +2,7 @@ package com.example.MobileAppBackend.controller;
 
 
 import com.example.MobileAppBackend.dto.create.CreatePostRequest;
+import com.example.MobileAppBackend.dto.model.PostWithRecipe;
 import com.example.MobileAppBackend.model.Post;
 import com.example.MobileAppBackend.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,15 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable String id){
-        Post post = postService.getById(id);
+    public ResponseEntity<PostWithRecipe> getPostById(@PathVariable String id){
+        PostWithRecipe post = postService.getById(id);
         return ResponseEntity.ok(post);
+    }
+
+    @PutMapping("/favorite/{id}")
+    public ResponseEntity<Post> favoritePost(@PathVariable String id){
+        this.postService.toggleFavorite(id);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/create")

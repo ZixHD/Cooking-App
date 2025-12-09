@@ -8,7 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -25,10 +28,10 @@ public class User {
     private String email;
     private String password;
     private String avatar;
-    private List<String> preferred_tags;
-    private List<String> preferred_cuisine;
-    private List<String> allergies;
-    private List<Long> favorites;
+    private List<String> preferred_tags = new ArrayList<>();;
+    private List<String> preferred_cuisine = new ArrayList<>();;
+    private List<String> allergies = new ArrayList<>();
+    private Set<String> favorites = new HashSet<>();
 
 
 }

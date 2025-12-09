@@ -1,10 +1,14 @@
 package com.example.MobileAppBackend.service;
 
 import com.example.MobileAppBackend.dto.create.CreatePostRequest;
+import com.example.MobileAppBackend.dto.model.PostWithRecipe;
 import com.example.MobileAppBackend.model.Post;
 import com.example.MobileAppBackend.model.Rating;
+import com.example.MobileAppBackend.model.Recipe;
 import com.example.MobileAppBackend.model.User;
 import com.example.MobileAppBackend.repository.PostRepository;
+import com.example.MobileAppBackend.repository.RecipeRepository;
+import com.example.MobileAppBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
@@ -21,6 +25,8 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final RecipeRepository recipeRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
 
@@ -28,8 +34,30 @@ public class PostService {
         return this.postRepository.findAll();
     }
 
-    public Post getById(String id){
-        return this.postRepository.findById(id).get();
+    public PostWithRecipe getById(String id){
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        Recipe recipe = recipeRepository.findById(post.getRecipeId())
+                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+
+        return new PostWithRecipe(post, recipe);
+
+    }
+
+    public void toggleFavorite(String id){
+        User user  = userRepository.findById(getCurrentUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        if (user.getFavorites().contains(id)) {
+            user.getFavorites().remove(id);
+        } else {
+            user.getFavorites().add(id);
+        }
+
+        userRepository.save(user);
     }
 
     public Post createPost(CreatePostRequest createPostRequest){
