@@ -1,11 +1,17 @@
 package com.example.MobileAppBackend.service;
 
+import com.example.MobileAppBackend.config.ApiKeyService;
 import com.example.MobileAppBackend.config.JwtService;
+import com.example.MobileAppBackend.dto.DeveloperRegisterRequestDto;
+import com.example.MobileAppBackend.dto.DeveloperRegisterResponseDto;
 import com.example.MobileAppBackend.dto.LoginRequest;
 import com.example.MobileAppBackend.dto.RegisterRequest;
 import com.example.MobileAppBackend.model.User;
+import com.example.MobileAppBackend.model.UserType;
 import com.example.MobileAppBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +23,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final ApiKeyService apiKeyService;
     private final PasswordEncoder passwordEncoder;
 
     private boolean verifyPassword(String rawPassword, String hashedPassword) {
@@ -53,6 +60,31 @@ public class AuthService {
         }
         throw new IllegalArgumentException("Invalid email or password");
 
+    }
+
+    public DeveloperRegisterResponseDto developerRegister(DeveloperRegisterRequestDto developerRegisterRequestDto) {
+        if(userRepository.existsUserByEmail(developerRegisterRequestDto.getEmail())) {
+            throw new RuntimeException("Email already registered");
+        }
+
+        User developer = new User();
+        developer.setEmail(developerRegisterRequestDto.getEmail());
+        developer.setUsername(developerRegisterRequestDto.getUsername());
+        developer.setPassword(developerRegisterRequestDto.getPassword());
+        developer.setUserType(UserType.DEVELOPER);
+        developer.setApiKey(apiKeyService.generateApiKey());
+        developer.setApiKeyActive(true);
+
+        User savedDeveloper = userRepository.save(developer);
+
+        DeveloperRegisterResponseDto developerRegisterResponseDto = new DeveloperRegisterResponseDto(
+                savedDeveloper.getId(),
+                savedDeveloper.getEmail(),
+                savedDeveloper.getUsername(),
+                savedDeveloper.getApiKey(),
+                "Developer account created successfully. Save your API key - it won't be shown again!"
+        );
+        return developerRegisterResponseDto;
     }
 
 }

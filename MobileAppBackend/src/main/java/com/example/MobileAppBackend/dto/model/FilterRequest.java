@@ -16,14 +16,16 @@ import java.util.List;
 public class FilterRequest {
 
     //TODO: maybe move this to POSTS
-    private boolean sortByNewest;
-    private boolean sortByOldest;
-    private boolean sortByPopularity;
-    private boolean sortByPrepTime;
+
+    //preporuceno (default)
+//    private boolean sortByNewest;
+//    private boolean sortByOldest;
+//    private boolean sortByPopularity;
+//    private boolean sortByPrepTime;
 
     private Integer minCalories;
     private Integer maxCalories;
-
+    //optional
     private Integer minPrepTime;
     private Integer maxPrepTime;
 

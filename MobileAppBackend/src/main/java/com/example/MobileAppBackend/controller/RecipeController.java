@@ -29,10 +29,13 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.getRecipeById(id));
     }
 
+    //API
     @GetMapping("/filter")
     public ResponseEntity<List<Recipe>> filterRecipes(@RequestBody FilterRequest filterRequest){
         return ResponseEntity.ok(recipeService.filterRecipes(filterRequest));
     }
+
+    //vraca postove na osnovu liste id=jeva recepta (request body id recepta)
 
     @PostMapping("/create")
     public ResponseEntity<Recipe> createRecipe(@Valid @RequestBody CreateRecipeRequest createRecipeRequest){

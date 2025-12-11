@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +33,14 @@ public class User {
     private List<String> preferred_cuisine = new ArrayList<>();;
     private List<String> allergies = new ArrayList<>();
     private Set<String> favorites = new HashSet<>();
+
+    private UserType userType;
+
+    //Developer
+    private String apiKey;
+    private LocalDateTime apiKeyCreatedAt;
+    private boolean apiKeyActive;
+
 
 
 }

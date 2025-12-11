@@ -28,6 +28,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        // skip filtering for developers
+        if(SecurityContextHolder.getContext().getAuthentication() != null){
+            filterChain.doFilter(request,response);
+            return;
+        }
+        System.out.println("OVde sam ja zapravo");
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

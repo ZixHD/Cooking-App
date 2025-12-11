@@ -87,15 +87,15 @@ public class RecipeService {
         }
 
         // Sorting
-        if(filterRequest.isSortByNewest()){
-            query.with(Sort.by(Sort.Direction.DESC, "created_at"));
-        }else if(filterRequest.isSortByOldest()){
-            query.with(Sort.by(Sort.Direction.ASC, "created_at"));
-        }else if(filterRequest.isSortByPopularity()){
-            query.with(Sort.by(Sort.Direction.ASC, "views"));
-        }else if(filterRequest.isSortByPrepTime()){
-            query.with(Sort.by(Sort.Direction.ASC, "prep_time"));
-        }
+//        if(filterRequest.isSortByNewest()){
+//            query.with(Sort.by(Sort.Direction.DESC, "created_at"));
+//        }else if(filterRequest.isSortByOldest()){
+//            query.with(Sort.by(Sort.Direction.ASC, "created_at"));
+//        }else if(filterRequest.isSortByPopularity()){
+//            query.with(Sort.by(Sort.Direction.ASC, "views"));
+//        }else if(filterRequest.isSortByPrepTime()){
+//            query.with(Sort.by(Sort.Direction.ASC, "prep_time"));
+//        }
 
         return mongoTemplate.find(query, Recipe.class);
 
