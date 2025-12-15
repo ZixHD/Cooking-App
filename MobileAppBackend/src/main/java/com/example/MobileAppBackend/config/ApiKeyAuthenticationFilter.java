@@ -47,7 +47,7 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken(
                                     user,
                                     null,
-                                    Collections.singletonList(authority) // Add the authority with ROLE_
+                                    Collections.singletonList(authority)
                             );
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }

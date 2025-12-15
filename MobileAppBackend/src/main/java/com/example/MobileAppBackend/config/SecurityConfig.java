@@ -29,13 +29,16 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(cors()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/register", "/auth/developer/register").permitAll()
-                        .requestMatchers("/api/recipes/**").hasAnyRole("CUSTOMER", "DEVELOPER")
+                        .requestMatchers("/api/recipes/**").hasAnyRole("USER", "DEVELOPER")
 
                         // User-specific endpoints
-                        .requestMatchers("/api/users/**").hasRole("CUSTOMER")
+                        .requestMatchers("/api/users/**").hasAnyRole("USER", "DEVELOPER")
+                        .requestMatchers("/api/posts/**").hasAnyRole("USER")
+                        .requestMatchers("/api/comments/**").hasAnyRole("USER")
+
 
                         // Developer-specific endpoints
-                        .requestMatchers("/api/developer/**").hasRole("DEVELOPER")
+                        .requestMatchers("/auth/developer/**").hasRole("DEVELOPER")
 
                         .anyRequest().authenticated()
                 )

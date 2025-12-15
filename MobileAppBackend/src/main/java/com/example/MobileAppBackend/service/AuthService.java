@@ -44,6 +44,7 @@ public class AuthService {
         user.setEmail(registerRequest.getEmail());
         user.setPassword(hashedPassword);
         user.setUsername(registerRequest.getUsername());
+        user.setUserType(UserType.USER);
 
         userRepository.save(user);
     }
