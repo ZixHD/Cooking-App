@@ -1,4 +1,5 @@
-package com.example.MobileAppBackend.dto;
+package com.example.MobileAppBackend.dto.authentication;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @ToString
 @Slf4j
-public class LoginRequest {
+public class RegisterRequest {
 
     private String email;
     private String password;
+    private String username;
 
 }
