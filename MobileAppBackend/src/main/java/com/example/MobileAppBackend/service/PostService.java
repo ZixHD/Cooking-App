@@ -1,6 +1,7 @@
 package com.example.MobileAppBackend.service;
 
 import com.example.MobileAppBackend.dto.create.CreatePostRequest;
+import com.example.MobileAppBackend.dto.model.FilterRequest;
 import com.example.MobileAppBackend.dto.model.PostWithRecipe;
 import com.example.MobileAppBackend.model.*;
 import com.example.MobileAppBackend.repository.CommentRepository;
@@ -9,13 +10,15 @@ import com.example.MobileAppBackend.repository.RecipeRepository;
 import com.example.MobileAppBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +30,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final ModelMapper modelMapper;
+    private final MongoTemplate mongoTemplate;
 
 
     public List<Post> getAll(){
@@ -44,6 +48,68 @@ public class PostService {
             throw new RuntimeException("No comments found for this post.");
         }
         return new PostWithRecipe(post, recipe, comments);
+
+    }
+
+    public List<Post> filterRecipes(FilterRequest filterRequest){
+
+        Query query = new Query();
+        List<Criteria> criteriaList = new ArrayList<>();
+
+        if (filterRequest.getTags() != null && !filterRequest.getTags().isEmpty()) {
+            for (String tag : filterRequest.getTags()) {
+                criteriaList.add(Criteria.where("tags").is(tag));
+            }
+        }
+        if(filterRequest.getAllergies() != null && !filterRequest.getAllergies().isEmpty()){
+            criteriaList.add(Criteria.where("allergies").nin(filterRequest.getAllergies()));
+        }
+        if(filterRequest.getDifficulty() != null && !filterRequest.getDifficulty().isEmpty()){
+            criteriaList.add(Criteria.where("difficulty").in(filterRequest.getDifficulty()));
+        }
+
+        if(filterRequest.getCuisine() != null && !filterRequest.getCuisine().isEmpty()){
+            criteriaList.add(Criteria.where("cuisine").in(filterRequest.getCuisine()));
+        }
+
+        if(filterRequest.getMinCalories() != null || filterRequest.getMaxCalories() != null){
+            Criteria calories = Criteria.where("calories");
+            if(filterRequest.getMinCalories() != null){
+                calories = calories.gte(filterRequest.getMinCalories());
+            }
+            if(filterRequest.getMaxCalories() != null){
+                calories = calories.lte(filterRequest.getMaxCalories());
+            }
+            criteriaList.add(calories);
+        }
+
+        if(filterRequest.getMinPrepTime() != null || filterRequest.getMaxPrepTime() != null){
+            Criteria prep = Criteria.where("prep_time");
+            if(filterRequest.getMinPrepTime() != null){
+                prep = prep.gte(filterRequest.getMinPrepTime());
+            }
+            if(filterRequest.getMaxPrepTime() != null){
+                prep = prep.lte(filterRequest.getMaxPrepTime());
+            }
+            criteriaList.add(prep);
+        }
+
+        if(!criteriaList.isEmpty()){
+            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
+        }
+
+        // Sorting
+//        if(filterRequest.isSortByNewest()){
+//            query.with(Sort.by(Sort.Direction.DESC, "created_at"));
+//        }else if(filterRequest.isSortByOldest()){
+//            query.with(Sort.by(Sort.Direction.ASC, "created_at"));
+//        }else if(filterRequest.isSortByPopularity()){
+//            query.with(Sort.by(Sort.Direction.ASC, "views"));
+//        }else if(filterRequest.isSortByPrepTime()){
+//            query.with(Sort.by(Sort.Direction.ASC, "prep_time"));
+//        }
+
+        return mongoTemplate.find(query, Post.class);
 
     }
 
@@ -66,6 +132,16 @@ public class PostService {
 
         createPostRequest.setCreated_at(LocalDateTime.now());
         Post post = modelMapper.map(createPostRequest, Post.class);
+
+        // New part
+        Recipe recipe = recipeRepository.findRecipeById(createPostRequest.getRecipeId());
+        post.setAllergies(recipe.getAllergies());
+        post.setCalories(recipe.getCalories());
+        post.setDifficulty(recipe.getDifficulty());
+        post.setIngredients(recipe.getIngredients());
+        post.setTags(recipe.getTags());
+        post.setPrep_time(recipe.getPrep_time());
+
         List<Rating> ratings = createPostRequest.getRatings().stream()
                 .map(ratingDto -> modelMapper.map(ratingDto, Rating.class))
                 .collect(Collectors.toList());

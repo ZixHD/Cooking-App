@@ -20,7 +20,10 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @GetMapping
-    public ResponseEntity<List<Recipe>> getAllRecipes(){
+    public ResponseEntity<?> getAllRecipes(@RequestParam(required = false) String exclude){
+        if(exclude != null){
+            return ResponseEntity.ok(recipeService.getSpecificRecipes(exclude));
+        }
         return ResponseEntity.ok(recipeService.getAllRecipes());
     }
 

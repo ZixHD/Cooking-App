@@ -1,14 +1,12 @@
 package com.example.MobileAppBackend.controller;
 
 
-import com.example.MobileAppBackend.dto.DeveloperRegisterRequestDto;
-import com.example.MobileAppBackend.dto.DeveloperRegisterResponseDto;
-import com.example.MobileAppBackend.dto.LoginRequest;
-import com.example.MobileAppBackend.dto.RegisterRequest;
-import com.example.MobileAppBackend.repository.UserRepository;
+import com.example.MobileAppBackend.dto.authentication.developer.DeveloperRegisterRequestDto;
+import com.example.MobileAppBackend.dto.authentication.developer.DeveloperRegisterResponseDto;
+import com.example.MobileAppBackend.dto.authentication.user.LoginRequest;
+import com.example.MobileAppBackend.dto.authentication.user.RegisterRequest;
 import com.example.MobileAppBackend.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

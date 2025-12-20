@@ -14,10 +14,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +30,27 @@ public class RecipeService {
     private final MongoTemplate mongoTemplate;
 
 
+    public List<Map<String, Object>> getSpecificRecipes(String exclude) {
+
+        Set<String> excludedFields = exclude != null
+                ? Arrays.stream(exclude.split(","))
+                .map(String::trim)
+                .collect(Collectors.toSet())
+                : Collections.emptySet();
+
+        List<Recipe> recipes = recipeRepository.findAll();
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        return recipes.stream()
+                .map(recipe -> {
+                    Map<String, Object> map = mapper.convertValue(recipe, new TypeReference<Map<String, Object>>() {});
+                    excludedFields.forEach(map::remove);
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
+
     public List<Recipe> getAllRecipes(){
         return this.recipeRepository.findAll();
     }
@@ -38,7 +59,6 @@ public class RecipeService {
         return this.recipeRepository.findById(id).orElse(null);
     }
 
-    //TODO: Add filtering with calorie range, date_and_time, cuisine and so on
     public List<Recipe> filterRecipes(FilterRequest filterRequest){
 
         Query query = new Query();
@@ -113,7 +133,7 @@ public class RecipeService {
                 .map(stepDto -> modelMapper.map(stepDto, Step.class))
                 .collect(Collectors.toList());
         recipe.setSteps(steps);
-
+        System.out.println(recipe);
         return this.recipeRepository.save(recipe);
     }
 

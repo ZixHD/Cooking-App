@@ -1,4 +1,4 @@
-package com.example.MobileAppBackend.dto.authentication;
+package com.example.MobileAppBackend.dto.authentication.developer;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

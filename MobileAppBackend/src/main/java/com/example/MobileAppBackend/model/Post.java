@@ -25,6 +25,16 @@ public class Post {
     private String authorId;
     private String recipeId;
     private List<Rating> ratings;
+
+    private String cuisine;
+    private List<String> allergies;
+    private String difficulty;
+    private int prep_time;
+    private int calories;
+    private List<String> tags;
+    private List<Ingredient> ingredients;
+
+
     private String text;
     private int views = 0;
     private LocalDateTime created_at;

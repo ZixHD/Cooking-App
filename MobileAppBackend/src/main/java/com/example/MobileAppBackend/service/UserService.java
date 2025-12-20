@@ -30,7 +30,6 @@ public class UserService {
         }
         User user = modelMapper.map(userDto, User.class);
 
-
         return this.userRepository.save(user);
     }
 

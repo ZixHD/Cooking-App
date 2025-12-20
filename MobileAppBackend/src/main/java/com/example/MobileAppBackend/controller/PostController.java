@@ -2,6 +2,7 @@ package com.example.MobileAppBackend.controller;
 
 
 import com.example.MobileAppBackend.dto.create.CreatePostRequest;
+import com.example.MobileAppBackend.dto.model.FilterRequest;
 import com.example.MobileAppBackend.dto.model.PostWithRecipe;
 import com.example.MobileAppBackend.model.Post;
 import com.example.MobileAppBackend.service.PostService;
@@ -31,6 +32,11 @@ public class PostController {
     public ResponseEntity<PostWithRecipe> getPostById(@PathVariable String id){
         PostWithRecipe post = postService.getById(id);
         return ResponseEntity.ok(post);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Post>> filterRecipes(@RequestBody FilterRequest filterRequest){
+        return ResponseEntity.ok(postService.filterRecipes(filterRequest));
     }
 
     @PutMapping("/favorite/{id}")
