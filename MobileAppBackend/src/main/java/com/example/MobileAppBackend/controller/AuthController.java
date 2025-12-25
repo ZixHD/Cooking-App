@@ -28,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/client/register")
-    public ResponseEntity<?> developerRegister(@RequestBody ClientRegisterRequestDto clientRegisterRequestDto) {
+    public ResponseEntity<ClientRegisterResponseDto> clientRegister(@RequestBody ClientRegisterRequestDto clientRegisterRequestDto) {
         ClientRegisterResponseDto responseDto = this.authService.clientRegister(clientRegisterRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 

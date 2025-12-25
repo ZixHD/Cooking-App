@@ -1,15 +1,15 @@
 package com.example.MobileAppBackend.controller;
 
-import com.example.MobileAppBackend.dto.create.CreateRecipeRequest;
 import com.example.MobileAppBackend.dto.model.FilterRequest;
+import com.example.MobileAppBackend.dto.model.RecipeDto;
+import com.example.MobileAppBackend.model.PostRecipe;
 import com.example.MobileAppBackend.model.Recipe;
-import com.example.MobileAppBackend.service.RecipeService;
+import com.example.MobileAppBackend.service.PostRecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecipeController {
 
-    private final RecipeService recipeService;
+    private final PostRecipeService postRecipeService;
 
     @GetMapping
     public ResponseEntity<?> getAllRecipes(@RequestParam(required = false) String exclude, @RequestParam(required = false) String include) {
@@ -28,39 +28,22 @@ public class RecipeController {
         }
 
         if(exclude != null){
-            return ResponseEntity.ok(recipeService.excludeParametersRecipe(exclude));
+            return ResponseEntity.ok(postRecipeService.getSpecificRecipesExclude(exclude));
         } else if (include != null) {
-            return ResponseEntity.ok(recipeService.includeParametersRecipe(include));
+            return ResponseEntity.ok(postRecipeService.getSpecificRecipesInclude(include));
         }
-        return ResponseEntity.ok(recipeService.getAllRecipes());
+        return ResponseEntity.ok(postRecipeService.getAllRecipes());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getRecipeById(@PathVariable String id){
-        return ResponseEntity.ok(recipeService.getRecipeById(id));
-    }
 
     //API
     @GetMapping("/filter")
-    public ResponseEntity<List<Recipe>> filterRecipes(@RequestBody FilterRequest filterRequest){
-        return ResponseEntity.ok(recipeService.filterRecipes(filterRequest));
+    public ResponseEntity<List<RecipeDto>> filterRecipes(@RequestBody FilterRequest filterRequest){
+        return ResponseEntity.ok(postRecipeService.filterRecipes(filterRequest));
     }
 
-    //vraca postove na osnovu liste id=jeva recepta (request body id recepta)
 
-    @PostMapping("/create")
-    public ResponseEntity<Recipe> createRecipe(@Valid @RequestBody CreateRecipeRequest createRecipeRequest){
-        return ResponseEntity.ok(recipeService.createRecipe(createRecipeRequest));
-    }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<Recipe> editRecipe(@PathVariable String id, @RequestBody CreateRecipeRequest createRecipeRequest){
-        return ResponseEntity.ok(recipeService.editRecipe(id, createRecipeRequest));
-    }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Recipe> deleteRecipe(@PathVariable String id){
-        recipeService.deleteRecipe(id);
-        return ResponseEntity.ok().build();
-    }
+
 }

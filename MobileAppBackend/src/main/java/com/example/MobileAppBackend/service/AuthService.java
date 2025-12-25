@@ -81,7 +81,7 @@ public class AuthService {
                 savedDeveloper.getEmail(),
                 savedDeveloper.getUsername(),
                 savedDeveloper.getApiKey(),
-                "Developer account created successfully. Save your API key - it won't be shown again!"
+                "Client account created successfully. Save your API key - it won't be shown again!"
         );
         return clientRegisterResponseDto;
     }

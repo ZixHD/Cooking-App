@@ -1,25 +1,23 @@
-package com.example.MobileAppBackend.model;
+package com.example.MobileAppBackend.dto.model;
 
+import com.example.MobileAppBackend.model.Ingredient;
+import com.example.MobileAppBackend.model.Step;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
-
-
-@Slf4j
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class Recipe {
-
+@Slf4j
+public class RecipeDto {
 
     private String title;
-    private String author_id;
+    private String authorId;
     private String description;
     private List<Ingredient> ingredients;
     private List<Step> steps;
@@ -29,5 +27,4 @@ public class Recipe {
     private String difficulty;
     private int prep_time;
     private int calories;
-
 }

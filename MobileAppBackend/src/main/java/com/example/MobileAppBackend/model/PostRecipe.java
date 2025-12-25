@@ -11,31 +11,35 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Document(collection = "posts")
+@Document(collection = "postRecipes")
 @Slf4j
 @Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class PostRecipe {
 
     @Id
     private String id;
 
     private String authorId;
-    private String recipeId;
     private List<Rating> ratings;
 
+    // Recipe part
+    private String title;
+    private String author_id;
+    private String description;
+    private List<Ingredient> ingredients;
+    private List<Step> steps;
+    private List<String> tags;
     private String cuisine;
     private List<String> allergies;
     private String difficulty;
     private int prep_time;
     private int calories;
-    private List<String> tags;
-    private List<Ingredient> ingredients;
-
 
     private String text;
     private int views = 0;
     private LocalDateTime created_at;
+    private LocalDateTime updated_at;
 }

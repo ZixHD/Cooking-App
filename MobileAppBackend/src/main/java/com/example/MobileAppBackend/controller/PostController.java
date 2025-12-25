@@ -4,8 +4,8 @@ package com.example.MobileAppBackend.controller;
 import com.example.MobileAppBackend.dto.create.CreatePostRequest;
 import com.example.MobileAppBackend.dto.model.FilterRequest;
 import com.example.MobileAppBackend.dto.model.PostWithRecipe;
-import com.example.MobileAppBackend.model.Post;
-import com.example.MobileAppBackend.service.PostService;
+import com.example.MobileAppBackend.model.PostRecipe;
+import com.example.MobileAppBackend.service.PostRecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,47 +20,47 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
 
-    private final PostService postService;
+    private final PostRecipeService postRecipeService;
 
     @GetMapping
-    public ResponseEntity<List<Post>> getAllPosts(){
-        List<Post> posts =  postService.getAll();
+    public ResponseEntity<List<PostRecipe>> getAllPosts(){
+        List<PostRecipe> posts =  postRecipeService.getAllPosts();
         return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PostWithRecipe> getPostById(@PathVariable String id){
-        PostWithRecipe post = postService.getById(id);
+        PostWithRecipe post = postRecipeService.getById(id);
         return ResponseEntity.ok(post);
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Post>> filterRecipes(@RequestBody FilterRequest filterRequest){
-        return ResponseEntity.ok(postService.filterRecipes(filterRequest));
+    public ResponseEntity<List<PostRecipe>> filterPosts(@RequestBody FilterRequest filterRequest){
+        return ResponseEntity.ok(postRecipeService.filterPosts(filterRequest));
     }
 
     @PutMapping("/favorite/{id}")
-    public ResponseEntity<Post> favoritePost(@PathVariable String id){
-        this.postService.toggleFavorite(id);
+    public ResponseEntity<PostRecipe> favoritePost(@PathVariable String id){
+        this.postRecipeService.toggleFavorite(id);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Post> createPost(@Valid @RequestBody CreatePostRequest createPostRequest){
+    public ResponseEntity<PostRecipe> createPost(@Valid @RequestBody CreatePostRequest createPostRequest){
         System.out.println("Create Post: " + createPostRequest);
-        Post post = postService.createPost(createPostRequest);
+        PostRecipe post = postRecipeService.createPost(createPostRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(post);
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Post> editPost(@PathVariable String id,  @Valid @RequestBody CreatePostRequest createPostRequest){
-        Post updated = postService.editPost(id, createPostRequest);
+    public ResponseEntity<PostRecipe> editPost(@PathVariable String id,  @Valid @RequestBody CreatePostRequest createPostRequest){
+        PostRecipe updated = postRecipeService.editPost(id, createPostRequest);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Post> deletePost(@PathVariable String id){
-        this.postService.deletePost(id);
+    public ResponseEntity<PostRecipe> deletePost(@PathVariable String id){
+        this.postRecipeService.deletePost(id);
         return ResponseEntity.noContent().build();
     }
 
