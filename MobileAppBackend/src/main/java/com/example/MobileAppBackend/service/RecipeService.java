@@ -30,7 +30,7 @@ public class RecipeService {
     private final MongoTemplate mongoTemplate;
 
 
-    public List<Map<String, Object>> getSpecificRecipes(String exclude) {
+    public List<Map<String, Object>> excludeParametersRecipe(String exclude) {
 
         Set<String> excludedFields = exclude != null
                 ? Arrays.stream(exclude.split(","))
@@ -46,6 +46,34 @@ public class RecipeService {
                 .map(recipe -> {
                     Map<String, Object> map = mapper.convertValue(recipe, new TypeReference<Map<String, Object>>() {});
                     excludedFields.forEach(map::remove);
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<Map<String, Object>> includeParametersRecipe(String include) {
+
+        Set<String> includedFields = include != null
+                ? Arrays.stream(include.split(","))
+                .map(String::trim)
+                .collect(Collectors.toSet())
+                : Collections.emptySet();
+
+        List<Recipe> recipes = recipeRepository.findAll();
+        ObjectMapper mapper = new ObjectMapper();
+
+        return recipes.stream()
+                .map(recipe -> {
+                    Map<String, Object> map =
+                            mapper.convertValue(recipe, new TypeReference<Map<String, Object>>() {});
+
+
+                    if (includedFields.isEmpty()) {
+                        return map;
+                    }
+
+
+                    map.keySet().retainAll(includedFields);
                     return map;
                 })
                 .collect(Collectors.toList());

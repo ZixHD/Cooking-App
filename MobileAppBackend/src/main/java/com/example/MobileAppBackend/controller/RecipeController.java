@@ -20,9 +20,17 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @GetMapping
-    public ResponseEntity<?> getAllRecipes(@RequestParam(required = false) String exclude){
+    public ResponseEntity<?> getAllRecipes(@RequestParam(required = false) String exclude, @RequestParam(required = false) String include) {
+        if (exclude != null && include != null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Only one parameter can be used: either 'include' or 'exclude', not both.");
+        }
+
         if(exclude != null){
-            return ResponseEntity.ok(recipeService.getSpecificRecipes(exclude));
+            return ResponseEntity.ok(recipeService.excludeParametersRecipe(exclude));
+        } else if (include != null) {
+            return ResponseEntity.ok(recipeService.includeParametersRecipe(include));
         }
         return ResponseEntity.ok(recipeService.getAllRecipes());
     }
