@@ -2,8 +2,8 @@ package com.example.MobileAppBackend.service;
 
 import com.example.MobileAppBackend.config.ApiKeyService;
 import com.example.MobileAppBackend.config.JwtService;
-import com.example.MobileAppBackend.dto.authentication.developer.DeveloperRegisterRequestDto;
-import com.example.MobileAppBackend.dto.authentication.developer.DeveloperRegisterResponseDto;
+import com.example.MobileAppBackend.dto.authentication.client.ClientRegisterRequestDto;
+import com.example.MobileAppBackend.dto.authentication.client.ClientRegisterResponseDto;
 import com.example.MobileAppBackend.dto.authentication.user.LoginRequest;
 import com.example.MobileAppBackend.dto.authentication.user.RegisterRequest;
 import com.example.MobileAppBackend.model.User;
@@ -61,29 +61,29 @@ public class AuthService {
 
     }
 
-    public DeveloperRegisterResponseDto developerRegister(DeveloperRegisterRequestDto developerRegisterRequestDto) {
-        if(userRepository.existsUserByEmail(developerRegisterRequestDto.getEmail())) {
+    public ClientRegisterResponseDto clientRegister(ClientRegisterRequestDto clientRegisterRequestDto) {
+        if(userRepository.existsUserByEmail(clientRegisterRequestDto.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
 
         User developer = new User();
-        developer.setEmail(developerRegisterRequestDto.getEmail());
-        developer.setUsername(developerRegisterRequestDto.getUsername());
-        developer.setPassword(developerRegisterRequestDto.getPassword());
-        developer.setUserType(UserType.DEVELOPER);
+        developer.setEmail(clientRegisterRequestDto.getEmail());
+        developer.setUsername(clientRegisterRequestDto.getUsername());
+        developer.setPassword(clientRegisterRequestDto.getPassword());
+        developer.setUserType(UserType.CLIENT);
         developer.setApiKey(apiKeyService.generateApiKey());
         developer.setApiKeyActive(true);
 
         User savedDeveloper = userRepository.save(developer);
 
-        DeveloperRegisterResponseDto developerRegisterResponseDto = new DeveloperRegisterResponseDto(
+        ClientRegisterResponseDto clientRegisterResponseDto = new ClientRegisterResponseDto(
                 savedDeveloper.getId(),
                 savedDeveloper.getEmail(),
                 savedDeveloper.getUsername(),
                 savedDeveloper.getApiKey(),
                 "Developer account created successfully. Save your API key - it won't be shown again!"
         );
-        return developerRegisterResponseDto;
+        return clientRegisterResponseDto;
     }
 
 }

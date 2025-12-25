@@ -1,8 +1,8 @@
 package com.example.MobileAppBackend.controller;
 
 
-import com.example.MobileAppBackend.dto.authentication.developer.DeveloperRegisterRequestDto;
-import com.example.MobileAppBackend.dto.authentication.developer.DeveloperRegisterResponseDto;
+import com.example.MobileAppBackend.dto.authentication.client.ClientRegisterRequestDto;
+import com.example.MobileAppBackend.dto.authentication.client.ClientRegisterResponseDto;
 import com.example.MobileAppBackend.dto.authentication.user.LoginRequest;
 import com.example.MobileAppBackend.dto.authentication.user.RegisterRequest;
 import com.example.MobileAppBackend.service.AuthService;
@@ -27,9 +27,9 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/developer/register")
-    public ResponseEntity<?> developerRegister(@RequestBody DeveloperRegisterRequestDto developerRegisterRequestDto) {
-        DeveloperRegisterResponseDto responseDto = this.authService.developerRegister(developerRegisterRequestDto);
+    @PostMapping("/client/register")
+    public ResponseEntity<?> developerRegister(@RequestBody ClientRegisterRequestDto clientRegisterRequestDto) {
+        ClientRegisterResponseDto responseDto = this.authService.clientRegister(clientRegisterRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 
     }

@@ -2,5 +2,5 @@ package com.example.MobileAppBackend.model;
 
 public enum UserType {
 
-    USER, DEVELOPER
+    USER, CLIENT
 }

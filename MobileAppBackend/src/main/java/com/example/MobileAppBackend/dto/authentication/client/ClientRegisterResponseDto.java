@@ -1,4 +1,4 @@
-package com.example.MobileAppBackend.dto.authentication.developer;
+package com.example.MobileAppBackend.dto.authentication.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class DeveloperRegisterResponseDto {
+public class ClientRegisterResponseDto {
 
     private String id;
     private String email;

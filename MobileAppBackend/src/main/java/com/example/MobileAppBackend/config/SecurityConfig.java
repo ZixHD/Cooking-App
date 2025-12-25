@@ -28,17 +28,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(cors()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "/auth/developer/register").permitAll()
-                        .requestMatchers("/api/recipes/**").hasAnyRole("USER", "DEVELOPER")
+                        .requestMatchers("/auth/login", "/auth/register", "/auth/client/register").permitAll()
+                        .requestMatchers("/api/recipes/**").hasAnyRole("USER", "CLIENT")
 
                         // User-specific endpoints
-                        .requestMatchers("/api/users/**").hasAnyRole("USER", "DEVELOPER")
+                        .requestMatchers("/api/users/**").hasAnyRole("USER", "CLIENT")
                         .requestMatchers("/api/posts/**").hasAnyRole("USER")
                         .requestMatchers("/api/comments/**").hasAnyRole("USER")
 
 
                         // Developer-specific endpoints
-                        .requestMatchers("/auth/developer/**").hasRole("DEVELOPER")
+                        .requestMatchers("/auth/client/**").hasRole("DEVELOPER")
 
                         .anyRequest().authenticated()
                 )

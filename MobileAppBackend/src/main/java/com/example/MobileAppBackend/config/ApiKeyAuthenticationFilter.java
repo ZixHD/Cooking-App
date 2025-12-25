@@ -37,7 +37,7 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
             Optional<User> userOptional = userRepository.findByApiKeyAndApiKeyActiveTrue(apiKey);
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
-                if (user.getUserType() == UserType.DEVELOPER) {
+                if (user.getUserType() == UserType.CLIENT) {
 
                     SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
                             "ROLE_" + user.getUserType().name()

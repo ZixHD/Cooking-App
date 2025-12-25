@@ -1,11 +1,11 @@
-package com.example.MobileAppBackend.dto.authentication.developer;
+package com.example.MobileAppBackend.dto.authentication.client;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class DeveloperRegisterRequestDto {
+public class ClientRegisterRequestDto {
 
     private String email;
     private String username;
