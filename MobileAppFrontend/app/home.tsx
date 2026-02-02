@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native"
-import { fetchRecipes } from "../../services/AxiosRecipe"
+import { fetchRecipes } from "../services/AxiosRecipe"
 import Recipe from "@/models/Recipe";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -16,7 +16,8 @@ const RecipeListScreen = () => {
             try{
                 const response = await fetchRecipes()
                 setRecipes(response as Recipe[])
-            }catch (error){
+                console.log("recipes:", recipes )
+              }catch (error){
                 console.error("Error fetching recipes: ", error)
             }
         };

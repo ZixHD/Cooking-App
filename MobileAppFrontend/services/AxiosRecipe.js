@@ -1,15 +1,17 @@
 import axios from "axios"
 import { jwtDecode } from "jwt-decode";
+import { attachAuthInterceptor } from "../utils/AuthMiddleware"; 
+
 
 const apiRecipe = axios.create({
-    baseURL: `https://unapparently-unworkmanly-darcey.ngrok-free.dev/api/recipes`,
+    baseURL: `https://unapparently-unworkmanly-darcey.ngrok-free.dev/api/posts`,
     headers: {
         "Content-Type": "application/json",
         'ngrok-skip-browser-warning': 'true',
     },
 })
 
-// apiBanking.interceptors.request.use(
+// apiBanking.rinterceptors.request.use(
 //     (config) => {
 //       const token = localStorage.getItem("token");
 //       if (token) {
@@ -28,6 +30,8 @@ const apiRecipe = axios.create({
 //       return Promise.reject(error);
 //     }
 // );
+
+attachAuthInterceptor(apiRecipe);
 
 
 export const fetchRecipes = async () => {

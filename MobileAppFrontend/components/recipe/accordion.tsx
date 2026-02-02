@@ -20,6 +20,7 @@ const RecipeAccordion = ({ steps }: RecipeAccordionProps) => {
    return (
     <FlatList
       data={steps}
+      scrollEnabled={false}
       keyExtractor={(item) => item.stepNumber.toString()}
       renderItem={({ item, index }) => (
         <View style={styles.container}>
