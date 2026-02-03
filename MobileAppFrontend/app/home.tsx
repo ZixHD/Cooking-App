@@ -1,55 +1,63 @@
 import { Link } from "expo-router";
-import { useEffect, useState } from "react";
-import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native"
-import { fetchRecipes } from "../services/AxiosRecipe"
+import { SetStateAction, useEffect, useState } from "react";
+import {
+  FlatList,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Modal,
+} from "react-native";
+import { fetchRecipes } from "../services/AxiosRecipe";
 import Recipe from "@/models/Recipe";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import FilterModal from "@/components/recipe/filter";
 
 const RecipeListScreen = () => {
+  const [search, setSearch] = useState("");
 
-    const [recipes, setRecipes] = useState<Recipe[]>([])
-    const [search, setSearch] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [allRecipes, setAllRecipes] = useState<Recipe[]>([]);
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
 
-    useEffect(() => {
-        const getRecipes = async () => {
-            try{
-                const response = await fetchRecipes()
-                setRecipes(response as Recipe[])
-                console.log("recipes:", recipes )
-              }catch (error){
-                console.error("Error fetching recipes: ", error)
-            }
-        };
-        getRecipes();
+  useEffect(() => {
+    const getRecipes = async () => {
+      const response = await fetchRecipes();
+      setAllRecipes(response as Recipe[]);
+      setFilteredRecipes(response as Recipe[]);
+    };
+    getRecipes();
+  }, []);
 
-    }, [])
-
-    const filtered = recipes.filter(r =>
-    r.title.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    const lower = search.toLowerCase();
+    setFilteredRecipes(
+      allRecipes.filter((r) => r.title.toLowerCase().includes(lower))
+    );
+  }, [search, allRecipes]);
 
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 16 }}>
       
       {/* HEADER */}
-      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
-        <TouchableOpacity>
-          
-        </TouchableOpacity>
+      <View style={{ flexDirection: "row", marginBottom: 16 }}>
+        <Text style={{ fontSize: 24, fontWeight: "bold" }}>Recipes</Text>
 
-        <Text style={{ fontSize: 24, fontWeight: "bold", marginLeft: 12 }}>
-          Recipes
-        </Text>
-
-        {/* FILTER BUTTON */}
-        <TouchableOpacity style={{ marginLeft: "auto" }}>
-          
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
+          style={{
+            marginLeft: "auto",
+            backgroundColor: "#333",
+            padding: 10,
+            borderRadius: 8,
+          }}
+        >
+          <Text style={{ color: "white" }}>Filter</Text>
         </TouchableOpacity>
       </View>
 
-      {/* SEARCH BAR */}
+      
       <TextInput
         value={search}
         onChangeText={setSearch}
@@ -57,7 +65,6 @@ const RecipeListScreen = () => {
         style={{
           padding: 12,
           borderWidth: 1,
-          borderColor: "#ccc",
           borderRadius: 8,
           marginBottom: 16,
         }}
@@ -65,7 +72,7 @@ const RecipeListScreen = () => {
 
       {/* LIST */}
       <FlatList
-        data={filtered}
+        data={filteredRecipes}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <Link href={`/recipes/${item.id}`} asChild>
@@ -73,22 +80,30 @@ const RecipeListScreen = () => {
               style={{
                 padding: 12,
                 borderWidth: 1,
-                borderColor: "#ddd",
                 borderRadius: 8,
                 marginBottom: 12,
               }}
             >
-              <Text style={{ fontSize: 18, fontWeight: "600" }}>{item.title}</Text>
-              <Text numberOfLines={2} style={{ color: "#666" }}>
-                {item.description}
+              <Text style={{ fontSize: 18, fontWeight: "600" }}>
+                {item.title}
               </Text>
+              <Text numberOfLines={2}>{item.description}</Text>
             </TouchableOpacity>
           </Link>
         )}
       />
+        <FilterModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onApply={(recipes: SetStateAction<Recipe[]>) => setFilteredRecipes(recipes)}
+        initialSearch={search}
+      />
+
+     
+
+
     </SafeAreaView>
   );
 };
 
-
-export default RecipeListScreen
+export default RecipeListScreen;

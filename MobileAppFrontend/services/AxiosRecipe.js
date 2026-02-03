@@ -11,25 +11,6 @@ const apiRecipe = axios.create({
     },
 })
 
-// apiBanking.rinterceptors.request.use(
-//     (config) => {
-//       const token = localStorage.getItem("token");
-//       if (token) {
-//         config.headers.Authorization = `Bearer ${token}`;
-
-//         // For debugging - remove in production
-//         console.log(
-//             `${config.method.toUpperCase()} ${
-//                 config.url
-//             } - Token: ${token.substring(0, 20)}...`
-//         );
-//       }
-//       return config;
-//     },
-//     (error) => {
-//       return Promise.reject(error);
-//     }
-// );
 
 attachAuthInterceptor(apiRecipe);
 
@@ -50,6 +31,17 @@ export const fetchRecipeById = async (id) => {
         return response.data
     }catch (error) {
         console.error("Error fetching recipe: ", error);
+        throw error;
+    }
+}
+
+export const filterRecipes = async(filterBody) => {
+    console.log("Filter body:", filterBody);
+    try{
+        const response = await apiRecipe.post(`/filter`, filterBody)
+        return response.data;
+    }catch (error) {
+        console.error("Error filtering recipe: ", error);
         throw error;
     }
 }
