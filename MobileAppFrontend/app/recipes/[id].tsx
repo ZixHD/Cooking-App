@@ -23,6 +23,10 @@ const RecipeDetails = () => {
     useEffect(() => {
         const load = async() => {
             try{
+               if (!id || id === "create-recipe") {
+                  setLoading(false);
+                  return; 
+                }
                 const recipeData = await fetchRecipeById(id);
                 setRecipe(recipeData)
 

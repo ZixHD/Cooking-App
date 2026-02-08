@@ -45,3 +45,14 @@ export const filterRecipes = async(filterBody) => {
         throw error;
     }
 }
+
+export const createRecipe = async(postBody) => {
+    console.log("Post body: ", postBody)
+    try{
+        const response = await apiRecipe.post("/create", postBody)
+        return response.data
+    }catch (error){
+        console.error("Error creating a post: ", error);
+        throw error;
+    }
+}
