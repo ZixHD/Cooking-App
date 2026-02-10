@@ -36,5 +36,5 @@ export default function Index() {
 
   if (!route) return null;
 
-  return <Redirect href={route} />;
+  return <Redirect href="/home" />;
 }
