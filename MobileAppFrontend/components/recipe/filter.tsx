@@ -11,7 +11,7 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { filterRecipes } from "@/services/AxiosRecipe";
+import { filterRecipes } from "@/services/AxiosPost";
 import RecipeFilterRequest from "@/models/FiterRequest";
 
 interface FilterModalProps {

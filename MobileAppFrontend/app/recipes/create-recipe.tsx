@@ -1,7 +1,7 @@
 import { Alert, Platform } from "react-native";
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
-import { createRecipe } from "@/services/AxiosRecipe";
+import { createRecipe } from "@/services/AxiosPost";
 
 
 const CreateRecipeForm = () => {

@@ -8,7 +8,7 @@ import {
   View,
   Modal,
 } from "react-native";
-import { fetchRecipes } from "../../services/AxiosRecipe";
+import { fetchRecipes } from "../../services/AxiosPost";
 import Recipe from "@/models/Recipe";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Platform } from "react-native"
