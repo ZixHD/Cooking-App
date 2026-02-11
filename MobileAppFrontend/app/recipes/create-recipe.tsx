@@ -111,7 +111,7 @@ const CreateRecipeForm = () => {
       <TextInput placeholder="Text" value={text} onChangeText={setText} style={inputStyle}/>
       <TextInput placeholder="Title" value={title} onChangeText={setTitle} style={inputStyle} />
       <TextInput placeholder="Author ID" value={authorId} onChangeText={setAuthorId} style={inputStyle} />
-      <TextInput placeholder="Description" value={description} onChangeText={setDescription} style={inputStyle} multiline />
+      <TextInput placeholder="Description" value={description} onChangeText={setDescription} style={inputStyle} multiline testID="create-description"/>
       <TextInput placeholder="Cuisine" value={cuisine} onChangeText={setCuisine} style={inputStyle} />
       <TextInput placeholder="Difficulty" value={difficulty} onChangeText={setDifficulty} style={inputStyle} />
       <TextInput placeholder="Prep Time (minutes)" value={prepTime} onChangeText={setPrepTime} keyboardType="numeric" style={inputStyle} />

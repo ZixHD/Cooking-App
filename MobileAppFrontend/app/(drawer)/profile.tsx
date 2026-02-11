@@ -87,6 +87,7 @@ const Profile = () => {
       
       <View style={{ alignItems: "center", marginBottom: 20 }}>
         <Image
+          testID="profile-avatar"
           source={{ uri: user.avatar || DEFAULT_AVATAR }}
           onError={() => handleChange("avatar", DEFAULT_AVATAR)}
           style={{
