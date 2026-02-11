@@ -70,8 +70,8 @@ const RecipeDetails = () => {
       </View>
    
    
-      <Text style={styles.title}>{recipe?.title}</Text>
-      <Text style={styles.description}>Author: {user?.username}</Text>
+      <Text testID="recipe-title" style={styles.title}>{recipe?.title}</Text>
+      <Text testID="recipe-description"style={styles.description}>Author: {user?.username}</Text>
       <Text style={styles.description}>{recipe?.description}</Text>
 
        {recipe?.tags && recipe?.tags.length > 0 && (

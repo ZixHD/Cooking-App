@@ -91,6 +91,7 @@ const RecipeListScreen = () => {
         renderItem={({ item }) => (
           <Link href={`/recipes/${item.id}`} asChild>
             <TouchableOpacity
+            testID="recipe-item" 
               style={{
                 padding: 12,
                 borderWidth: 1,

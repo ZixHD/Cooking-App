@@ -68,6 +68,7 @@ export default function LoginScreen({ setIsLoggedIn }: any) {
         autoCapitalize="none"
         keyboardType="email-address"
         style={styles.input}
+        testID="login-email"
       />
 
       <TextInput
@@ -76,13 +77,14 @@ export default function LoginScreen({ setIsLoggedIn }: any) {
         onChangeText={setPassword}
         secureTextEntry
         style={styles.input}
+        testID="login-password"
       />
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText} testID="login-submit">Login</Text>
         )}
       </TouchableOpacity>
     </View>
