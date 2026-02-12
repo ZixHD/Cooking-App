@@ -58,6 +58,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
     }
   };
 
+  const handleReset = async () => {
+    resetFilters();
+
+    const filtered = await filterRecipes({}); 
+    onApply(filtered);
+    onClose()
+  };
+
   const resetFilters = () => {
     setMinCalories("");
     setMaxCalories("");
@@ -157,8 +165,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
               <TouchableOpacity onPress={applyFilters} style={styles.applyButton}>
                <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>Apply Filters</Text>
               </TouchableOpacity>
+              <TouchableOpacity onPress={handleReset} style={styles.resetButton}>
+                <Text style={styles.resetText}>Reset Filters</Text>
+              </TouchableOpacity>
 
-              <TouchableOpacity onPress={handleClose} style={{ padding: 12 }}>
+             <TouchableOpacity onPress={handleClose} style={styles.resetButton}>
                 <Text style={{ textAlign: "center", color: "red" }}>Cancel</Text>
               </TouchableOpacity>
             </ScrollView>
@@ -188,6 +199,17 @@ const styles = {
     textAlign: "center",
     fontWeight: "bold",
   },
+  resetButton: {
+    backgroundColor: "#ddd",
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  resetText: {
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#333",
+  } as const,
 };
 
 export default FilterModal;
