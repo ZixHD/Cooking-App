@@ -15,7 +15,7 @@ describe("Home screen flows", () => {
       .should("be.visible")
       .click();
 
-cy.url().should("match", /\/recipes\/[a-f0-9]{24}$/);
+    cy.url().should("match", /\/recipes\/[a-f0-9]{24}$/);
     cy.get('[data-testid="recipe-title"]')
       .should("be.visible")
       .and("not.be.empty");
@@ -23,6 +23,41 @@ cy.url().should("match", /\/recipes\/[a-f0-9]{24}$/);
     cy.get('[data-testid="recipe-description"]')
       .should("be.visible")
       .and("not.be.empty");
+  });
+
+  it("Add the recipe to favorites and shows in the home page", () => {
+
+    cy.get('[data-testid="recipe-item"]')
+      .first()
+      .should("be.visible")
+      .click();
+
+    cy.url().should("match", /\/recipes\/[a-f0-9]{24}$/);
+    cy.get('[data-testid="recipe-title"]')
+      .should("be.visible")
+      .and("not.be.empty");
+
+    cy.get('[data-testid="recipe-description"]')
+      .should("be.visible")
+      .and("not.be.empty");
+
+    cy.get('[data-testid="favorite-button"]')
+      .click();
+
+    cy.get('[data-testid="recipe-title"]')
+      .invoke("text")
+      .as("recipeTitle");
+
+    cy.go("back");
+
+    cy.url().should("include", "/home");
+
+    
+    cy.get('[data-testid="home-favorite"]').click();
+
+    cy.get
+
+    
   });
 
 });

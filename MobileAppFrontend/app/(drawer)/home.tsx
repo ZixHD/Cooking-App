@@ -114,7 +114,7 @@ const RecipeListScreen = () => {
             borderRadius: 8,
           }}
         >
-          <Text style={{ color: "white" }}>
+          <Text testID="home-favorite" style={{ color: "white" }}>
             {showFavorites ? "Favorites ✓" : "Favorites"}
           </Text>
         </TouchableOpacity>
