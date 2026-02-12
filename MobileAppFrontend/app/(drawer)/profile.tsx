@@ -26,9 +26,8 @@ const Profile = () => {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        console.log("123123")
+       
         const token = await getToken("jwt")
-        console.log("token ", token)
         if (!token) return;
 
         const decoded: any = jwtDecode(token);

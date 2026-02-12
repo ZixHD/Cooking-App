@@ -34,7 +34,6 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const [tags, setTags] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [cuisine, setCuisine] = useState("");
-
   const applyFilters = async () => {
     try {
       const body: RecipeFilterRequest = {
